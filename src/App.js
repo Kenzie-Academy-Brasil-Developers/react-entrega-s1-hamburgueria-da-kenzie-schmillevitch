@@ -55,7 +55,7 @@ function App() {
       ) {
         return [...oldProducts, currentProduct];
       } else {
-        toast.warning("Você só pode adicionar um produto por vez");
+        toast.warning("Você só pode adicionar um produto por vez!");
         return oldProducts;
       }
     });
@@ -90,6 +90,7 @@ function App() {
       </header>
       <main>
         <ToastContainer />
+
         {filtered ? (
           <>
             <div className="resultFilter">
