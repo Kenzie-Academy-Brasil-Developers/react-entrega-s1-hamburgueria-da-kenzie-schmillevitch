@@ -1,0 +1,118 @@
+import "./App.css";
+import { useState, useEffect } from "react";
+import ProductsList from "./components/ProductsList";
+import Cart from "./components/Cart";
+
+function App() {
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [inputText, setInputText] = useState("");
+  const [currentSale, setCurrentSale] = useState([]);
+
+  useEffect(() => {
+    fetch("https://hamburgueria-kenzie-json-serve.herokuapp.com/products")
+      .then((response) => response.json())
+      .then((response) => {
+        setProducts(response);
+        setFilteredProducts(response);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  function showProducts() {
+    if (!inputText) {
+      return setFilteredProducts(products);
+    }
+    const filtered = products.filter(
+      (product) =>
+        product.category
+          .toLowerCase()
+          .replace(new RegExp("[ÍÌÎ]", "gi"), "i")
+          .normalize("NFD")
+          .includes(
+            inputText.toLowerCase().replace(new RegExp("[ÍÌÎ]", "gi"), "i")
+          ) ||
+        product.name
+          .toLowerCase()
+          .replace(new RegExp("[ÍÌÎ]", "gi"), "i")
+          .normalize("NFD")
+          .includes(
+            inputText.toLowerCase().replace(new RegExp("[ÍÌÎ]", "gi"), "i")
+          )
+    );
+    setFilteredProducts(filtered);
+  }
+
+  function handleClick(productId) {
+    const currentProduct = products.find((product) => product.id === productId);
+    setCurrentSale((oldProducts) => {
+      if (
+        !oldProducts.find((oldProduct) => oldProduct.id === currentProduct.id)
+      ) {
+        return [...oldProducts, currentProduct];
+      }
+      return oldProducts;
+    });
+  }
+
+  function cleanFilter() {
+    setInputText("");
+  }
+
+  return (
+    <div className="containerBody">
+      <header className="App-header">
+        <div className="headerContainer">
+          <div className="divBurguerKenzie">
+            <p className="headerBurguer">Burguer</p>
+            <p className="headerKenzie">Kenzie</p>
+          </div>
+          <div className="divInput">
+            <input
+              className="inputSearch"
+              type="text"
+              placeholder="Digitar Pesquisa"
+              onChange={(event) => setInputText(event.target.value)}
+            ></input>
+            <button className="searchButton" onClick={showProducts}>
+              Pesquisar
+            </button>
+          </div>
+        </div>
+      </header>
+      <main>
+        {inputText !== "" ? (
+          <>
+            <div className="resultFilter">
+              <p className="resultFilterText">Resultados para: {inputText}</p>
+              <button className="cleanFilterButton" onClick={cleanFilter}>
+                Limpar busca
+              </button>
+            </div>
+            <div className="containerMain">
+              <ProductsList
+                products={filteredProducts}
+                setProducts={setProducts}
+                showProducts={showProducts}
+                handleClick={handleClick}
+              ></ProductsList>
+              <Cart currentSale={currentSale} />
+            </div>
+          </>
+        ) : (
+          <div className="containerMain">
+            <ProductsList
+              products={filteredProducts}
+              setProducts={setProducts}
+              showProducts={showProducts}
+              handleClick={handleClick}
+            ></ProductsList>
+            <Cart currentSale={currentSale} />
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+export default App;
