@@ -2,6 +2,8 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import ProductsList from "./components/ProductsList";
 import Cart from "./components/Cart";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -52,8 +54,10 @@ function App() {
         !oldProducts.find((oldProduct) => oldProduct.id === currentProduct.id)
       ) {
         return [...oldProducts, currentProduct];
+      } else {
+        toast.warning("Você só pode adicionar um produto por vez");
+        setCurrentSale(oldProducts);
       }
-      return oldProducts;
     });
   }
 
@@ -85,10 +89,14 @@ function App() {
         </div>
       </header>
       <main>
+        <ToastContainer />
         {filtered ? (
           <>
             <div className="resultFilter">
-              <p className="resultFilterText">Resultados para: {inputText}</p>
+              <div className="resultText">
+                <p className="resultFilterText">Resultados para:</p>
+                <p className="inputText">{inputText}</p>
+              </div>
               <button className="cleanFilterButton" onClick={cleanFilter}>
                 Limpar busca
               </button>

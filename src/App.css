@@ -263,6 +263,20 @@ span {
   padding: 6px;
 }
 
+.resultText {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.inputText {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 34px;
+  color: #828282;
+}
+
 .cleanFilterButton {
   background-color: #27ae60;
   color: white;
