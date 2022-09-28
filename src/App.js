@@ -56,7 +56,7 @@ function App() {
         return [...oldProducts, currentProduct];
       } else {
         toast.warning("Você só pode adicionar um produto por vez");
-        setCurrentSale(oldProducts);
+        return oldProducts;
       }
     });
   }
