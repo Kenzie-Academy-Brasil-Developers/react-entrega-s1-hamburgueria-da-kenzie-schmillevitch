@@ -17,7 +17,7 @@ const Cart = ({ currentSale }) => {
                   alt="imagem produto"
                 />
                 <div className="divProductCartInfos">
-                  <h4>{currentProduct.name}</h4>
+                  <h5>{currentProduct.name}</h5>
                   <span>{currentProduct.category}</span>
                 </div>
               </div>

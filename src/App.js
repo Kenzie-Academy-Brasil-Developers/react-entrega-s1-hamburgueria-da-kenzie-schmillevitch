@@ -6,6 +6,7 @@ import Cart from "./components/Cart";
 function App() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filtered, isFiltered] = useState(false);
   const [inputText, setInputText] = useState("");
   const [currentSale, setCurrentSale] = useState([]);
 
@@ -20,8 +21,8 @@ function App() {
   }, []);
 
   function showProducts() {
-    if (!inputText) {
-      return setFilteredProducts(products);
+    if (inputText === "") {
+      return setProducts(products);
     }
     const filtered = products.filter(
       (product) =>
@@ -41,6 +42,7 @@ function App() {
           )
     );
     setFilteredProducts(filtered);
+    isFiltered(true);
   }
 
   function handleClick(productId) {
@@ -57,6 +59,8 @@ function App() {
 
   function cleanFilter() {
     setInputText("");
+    setFilteredProducts(products);
+    isFiltered(false);
   }
 
   return (
@@ -81,7 +85,7 @@ function App() {
         </div>
       </header>
       <main>
-        {inputText !== "" ? (
+        {filtered ? (
           <>
             <div className="resultFilter">
               <p className="resultFilterText">Resultados para: {inputText}</p>
